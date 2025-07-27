@@ -1,10 +1,12 @@
 import streamlit as st
-from html2docx import html2docx
+from html2docx import HTML2Docx
 from io import BytesIO
 
 def convert_html_to_docx(html_content):
+    converter = HTML2Docx()
+    doc = converter.parse_html_string(html_content)
     docx_io = BytesIO()
-    html2docx(html=html_content, output=docx_io)
+    doc.save(docx_io)
     docx_io.seek(0)
     return docx_io
 
@@ -14,7 +16,7 @@ uploaded_file = st.file_uploader("Upload HTML file", type=["html", "htm"])
 
 if uploaded_file:
     html_content = uploaded_file.read().decode("utf-8")
-    
+
     if st.button("Convert to DOCX"):
         docx_data = convert_html_to_docx(html_content)
         st.success("Conversion successful!")
